@@ -48,6 +48,7 @@ class Trainer:
             num_classes=config.NUM_CLASSES,
             dice_weight=config.DICE_WEIGHT,
             ce_weight=config.CE_WEIGHT,
+            focal_weight=config.FOCAL_WEIGHT,
             alignment_weight=config.ALIGNMENT_WEIGHT,
             use_alignment=True,
             class_weights=class_weights

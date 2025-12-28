@@ -9,6 +9,7 @@ Fixes:
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+from .losses import FocalLoss
 
 
 class ImprovedAlignmentLoss(nn.Module):
@@ -189,14 +190,21 @@ class ImprovedCombinedLoss(nn.Module):
     FIXED for AMP compatibility
     """
     
-    def __init__(self, num_classes=2, dice_weight=0.5, ce_weight=0.5, 
+    def __init__(self, num_classes=2, dice_weight=0.5, ce_weight=0.5, focal_weight=0.0,
                  alignment_weight=0.3, use_alignment=True, class_weights=None):
         super(ImprovedCombinedLoss, self).__init__()
         
         self.dice_weight = dice_weight
         self.ce_weight = ce_weight
+        self.focal_weight = focal_weight
         self.alignment_weight = alignment_weight
         self.use_alignment = use_alignment
+        
+        # Focal Loss
+        self.focal_loss_fn = FocalLoss(
+            gamma=2.0,
+            alpha=class_weights if class_weights is not None else 0.25
+        )
         
         # Dice Loss (Weighted if supported, but typically Dice handles overlap well)
         from monai.losses import DiceLoss
@@ -248,7 +256,10 @@ class ImprovedCombinedLoss(nn.Module):
         
         dice_ce_loss = self.dice_weight * dice_l + self.ce_weight * ce_l
         
-        total_loss = dice_ce_loss
+        # Focal Loss
+        focal_l = self.focal_loss_fn(outputs, targets_ce)
+        
+        total_loss = dice_ce_loss + self.focal_weight * focal_l
         alignment_loss = torch.tensor(0.0, device=outputs.device, dtype=outputs.dtype)
         alignment_details = {}
         
