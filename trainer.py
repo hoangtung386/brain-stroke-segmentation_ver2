@@ -422,7 +422,7 @@ class Trainer:
             wandb.watch(self.model, log='all', log_freq=100)
         
         print(f"\n{'='*60}")
-        print(f"🚀 Starting Training (SCALER FIXED VERSION)")
+        print(f"Starting Training (SCALER FIXED VERSION)")
         print(f"{'='*60}")
         print(f"Epochs: {self.start_epoch} → {num_epochs}")
         print(f"Device: {self.device}")

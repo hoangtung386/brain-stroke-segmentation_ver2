@@ -15,16 +15,16 @@ from models.lcnn import LCNN
 # Import fixed trainer instead of old one
 try:
     from trainer_fixed import FixedTrainer as Trainer
-    print("✅ Using FixedTrainer (validation NaN fixes applied)")
+    print("Using FixedTrainer (validation NaN fixes applied)")
 except ImportError:
-    print("⚠️ FixedTrainer not found, falling back to original trainer")
+    print("FixedTrainer not found, falling back to original trainer")
     from trainer import Trainer
 
 
 def validate_config():
     """Validate configuration before training"""
     print("\n" + "="*60)
-    print("🔍 Configuration Validation")
+    print("Configuration Validation")
     print("="*60)
     
     issues = []
@@ -52,19 +52,19 @@ def validate_config():
     
     # Print results
     if issues:
-        print("\n❌ CRITICAL ISSUES:")
+        print("\nCRITICAL ISSUES:")
         for issue in issues:
             print(f"   - {issue}")
         print("\nPlease fix these issues before training.")
         return False
     
     if warnings:
-        print("\n⚠️ WARNINGS:")
+        print("\nWARNINGS:")
         for warning in warnings:
             print(f"   - {warning}")
         print("\nYou can proceed, but consider adjusting these parameters.")
     
-    print("\n✅ Configuration validated")
+    print("\nConfiguration validated")
     print("="*60)
     return True
 
@@ -72,7 +72,7 @@ def validate_config():
 def print_system_info():
     """Print system information"""
     print("\n" + "="*60)
-    print("💻 System Information")
+    print("System Information")
     print("="*60)
     print(f"Python version: {sys.version.split()[0]}")
     print(f"PyTorch version: {torch.__version__}")
@@ -103,7 +103,7 @@ def main():
     
     # Validate configuration
     if not validate_config():
-        print("\n❌ Configuration validation failed. Exiting.")
+        print("\nConfiguration validation failed. Exiting.")
         return 1
     
     # Set seed for reproducibility
@@ -119,25 +119,25 @@ def main():
     
     # Set device
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    print(f"\n✅ Using device: {device}")
+    print(f"Using device: {device}")
     
     # Create dataloaders
     print("\n" + "="*60)
-    print("📊 Loading Dataset")
+    print("Loading Dataset")
     print("="*60)
     
     try:
         train_loader, val_loader = create_dataloaders(Config)
-        print(f"✅ Data loaded successfully")
+        print(f"Data loaded successfully")
         print(f"   Train batches: {len(train_loader)}")
         print(f"   Val batches: {len(val_loader)}")
     except Exception as e:
-        print(f"❌ Error loading data: {e}")
+        print(f"Error loading data: {e}")
         return 1
     
     # Create model
     print("\n" + "="*60)
-    print("🏗️ Creating Model")
+    print("Creating Model")
     print("="*60)
     
     try:
@@ -150,12 +150,12 @@ def main():
         )
         
         num_params = sum(p.numel() for p in model.parameters()) / 1e6
-        print(f"✅ Model created")
-        print(f"   Parameters: {num_params:.2f}M")
-        print(f"   Global impact: {Config.GLOBAL_IMPACT}")
-        print(f"   Local impact: {Config.LOCAL_IMPACT}")
+        print(f"Model created")
+        print(f"Parameters: {num_params:.2f}M")
+        print(f"Global impact: {Config.GLOBAL_IMPACT}")
+        print(f"Local impact: {Config.LOCAL_IMPACT}")
     except Exception as e:
-        print(f"❌ Error creating model: {e}")
+        print(f"Error creating model: {e}")
         return 1
     
     # Clean memory before training
@@ -164,7 +164,7 @@ def main():
     
     # Create trainer
     print("\n" + "="*60)
-    print("🎯 Initializing Trainer")
+    print("Initializing Trainer")
     print("="*60)
     
     try:
@@ -176,15 +176,15 @@ def main():
             device=device,
             use_wandb=Config.USE_WANDB
         )
-        print(f"✅ Trainer initialized")
-        print(f"   Using: {trainer.__class__.__name__}")
+        print(f"Trainer initialized")
+        print(f"Using: {trainer.__class__.__name__}")
     except Exception as e:
-        print(f"❌ Error initializing trainer: {e}")
+        print(f"Error initializing trainer: {e}")
         return 1
     
     # Start training
     print("\n" + "="*60)
-    print("🚀 Starting Training")
+    print("Starting Training")
     print("="*60)
     print(f"Total epochs: {Config.NUM_EPOCHS}")
     print(f"Starting from epoch: {trainer.start_epoch}")
@@ -193,14 +193,14 @@ def main():
     
     try:
         trainer.train(num_epochs=Config.NUM_EPOCHS)
-        print("\n✅ Training completed successfully!")
+        print("\nTraining completed successfully!")
         return 0
     except KeyboardInterrupt:
-        print("\n⚠️ Training interrupted by user")
+        print("\nTraining interrupted by user")
         print("Checkpoint saved. Resume with: python train.py")
         return 0
     except Exception as e:
-        print(f"\n❌ Training error: {e}")
+        print(f"\nTraining error: {e}")
         import traceback
         traceback.print_exc()
         return 1
