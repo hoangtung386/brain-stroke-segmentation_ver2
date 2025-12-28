@@ -35,7 +35,7 @@ class Config:
     PERSISTENT_WORKERS = True
     
     # Model architecture
-    T = 2                       # Number of adjacent slices
+    T = 1                       # Number of adjacent slices
     NUM_PARTITIONS_H = 4
     NUM_PARTITIONS_W = 4
     GLOBAL_IMPACT = 0.3
@@ -59,9 +59,9 @@ class Config:
     DETECT_ANOMALY = False
     
     # Loss weights
-    DICE_WEIGHT = 0.7
-    CE_WEIGHT = 0.3
-    FOCAL_WEIGHT = 1.0
+    DICE_WEIGHT = 0.5
+    CE_WEIGHT = 0.2
+    FOCAL_WEIGHT = 0.3
     ALIGNMENT_WEIGHT = 0.05
     PERCEPTUAL_WEIGHT = 0.1   
     
