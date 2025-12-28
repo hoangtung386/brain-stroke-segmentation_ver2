@@ -35,7 +35,7 @@ class Config:
     PERSISTENT_WORKERS = True
     
     # Model architecture
-    T = 1                       # Number of adjacent slices
+    T = 2                       # Number of adjacent slices
     NUM_PARTITIONS_H = 4
     NUM_PARTITIONS_W = 4
     GLOBAL_IMPACT = 0.3
@@ -53,7 +53,7 @@ class Config:
     WEIGHT_DECAY = 1e-4
     
     # Training stability
-    GRAD_CLIP_NORM = 1.0
+    GRAD_CLIP_NORM = 0.1
     USE_AMP = False
     DEBUG_MODE = False
     DETECT_ANOMALY = False
@@ -67,7 +67,7 @@ class Config:
     
     # W&B settings
     USE_WANDB = True
-    WANDB_PROJECT = "Local-Global-Combined-Neural-Network-segment-Stroke"
+    WANDB_PROJECT = "Local-Global-Combined-Neural-Network-Segment-Stroke"
     WANDB_ENTITY = None
     
     # Scheduler parameters
